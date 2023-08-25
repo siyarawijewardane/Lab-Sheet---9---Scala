@@ -1,47 +1,48 @@
-class Account(val accountNumber: String, var balance: Double) {
-  def deposit(amount: Double): Unit = {
-    if (amount > 0) {
-      balance += amount
-      println(s"Deposited $amount. New balance: $balance")
-    } else {
-      println("Invalid deposit amount.")
-    }
-  }
-  
-  def withdraw(amount: Double): Unit = {
-    if (amount > 0 && amount <= balance) {
-      balance -= amount
-      println(s"Withdrew $amount. New balance: $balance")
-    } else {
-      println("Invalid withdrawal amount.")
-    }
-  }
-  
-  def transfer(targetAccount: Account, amount: Double): Unit = {
-    if (amount > 0 && amount <= balance) {
-      balance -= amount
-      targetAccount.balance += amount
-      println(s"Transferred $amount to ${targetAccount.accountNumber}. Your new balance: $balance")
-    } else {
-      println("Invalid transfer amount.")
-    }
-  }
-  
-  override def toString: String = s"Account($accountNumber, Balance: $balance)"
+class Account(n:Int, b:Double) {
+
+      val acnumber:Int = n
+      var balance:Double = b
+
+      def withdraw(a:Double) = this.balance = this.balance - a
+
+      def deposit(a:Double) = this.balance = this.balance + a
+
+      def transfer(a:Account, b:Double) = {
+
+        if (this.balance < b) println("Insufficient balance")
+        else
+        {
+          this.withdraw(b)
+          a.deposit(b)
+        }
+      }
+
+      override def toString = "Account "+acnumber+" : " + balance
 }
 
-// Example usage
-val account1 = new Account("12345", 1000.0)
-val account2 = new Account("67890", 500.0)
+object AccountExample{
 
-println("Initial Account States:")
-println(account1)
-println(account2)
+  def main(args: Array[String]): Unit = {
+    
+      var a1 = new Account(1, 1000)
+      var a2 = new Account(2, 2000)
 
-account1.deposit(200.0)
-account1.withdraw(50.0)
-account1.transfer(account2, 300.0)
+      println(a1)
+      println(a2)
 
-println("\nUpdated Account States:")
-println(account1)
-println(account2)
+      a1.deposit(500)
+      a2.withdraw(200)
+
+      println(a1)
+      println(a2)
+
+      a1.transfer(a2, 1000)
+      println(a1)
+      println(a2)
+
+      a1.transfer(a2, 2000)
+      println(a1)
+      println(a2)
+  }
+      
+}

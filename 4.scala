@@ -1,38 +1,56 @@
-class Account(val accountNumber: Int, var balance: Double) {
-  override def toString: String = s"Account($accountNumber, $balance)"
-}
+class Account(n:Int, b:Double) {
 
-class Bank(val accounts: List[Account]) {
-  def accountsWithNegativeBalances: List[Account] = accounts.filter(_.balance < 0)
+      val acnumber:Int = n
+      var balance:Double = b
 
-  def calculateTotalBalance: Double = accounts.map(_.balance).sum
+      def withdraw(a:Double) = this.balance = this.balance - a
 
-  def applyInterest(): Unit = {
-    for (account <- accounts) {
-      if (account.balance > 0) {
-        account.balance *= 1.05 // Deposit interest of 5%
-      } else {
-        account.balance *= 1.1 // Overdraft interest of 10%
+      def deposit(a:Double) = this.balance = this.balance + a
+
+      def transfer(a:Account, b:Double) = {
+
+        if (this.balance < b) println("Insufficient balance")
+        else{
+          this.withdraw(b)
+          a.deposit(b)
+        }
+        
       }
-    }
-  }
+
+      override def toString = "Account "+acnumber+" : " + balance
 }
 
-object Main extends App {
-  val account1 = new Account(1, 100.0)
-  val account2 = new Account(2, -50.0)
-  val account3 = new Account(3, 200.0)
+object AccountExample{
+      
+      def main(args: Array[String]): Unit = {
 
-  val bank = new Bank(List(account1, account2, account3))
+        val overdraft = (b:List[Account]) => b.filter(x => x.balance < 0)
+        val balance=(b:List[Account]) => b.map(_.balance).sum
+        val interest = (b:List[Account]) => b.map(x => if (x.balance > 0) x.balance = x.balance + x.balance * 0.05 else x.balance = x.balance + x.balance * 0.1)
 
-  println("Accounts with negative balances:")
-  val negativeBalances = bank.accountsWithNegativeBalances
-  negativeBalances.foreach(println)
+        var a1 = new Account(1, 1000)
+        var a2 = new Account(2, 2000)
+        var a3 = new Account(3, -500)
+        var a4 = new Account(4, -1000)
+        var a5 = new Account(5, 5000)
+        var a6 = new Account(6, -2000)
+        var a7 = new Account(7, 10000)
+        var a8 = new Account(8, -5000)
+        var a9 = new Account(9, 2000)
+        var a10 = new Account(10, 1000)
 
-  val totalBalance = bank.calculateTotalBalance
-  println(s"Total balance of all accounts: $totalBalance")
+        var bank:List[Account] = List(a1, a2, a3, a4, a5, a6, a7, a8, a9, a10)
 
-  bank.applyInterest()
-  println("Balances after applying interest:")
-  bank.accounts.foreach(println)
+        println("List of Accounts")
+        println(bank)
+
+        println("\nList of Accounts with negative balances")
+        println(overdraft(bank))
+
+        println("\nTotal Balance "+balance(bank))
+
+        println("\nFinal balances of all accounts after applying the interest")
+        interest(bank)
+        println(bank)
+      }
 }

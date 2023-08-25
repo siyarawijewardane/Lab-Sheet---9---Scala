@@ -1,27 +1,29 @@
-class Rational(n: Int, d: Int) {
-  require(d != 0, "Denominator cannot be zero")
+class Rational(numerator: Int, denominator: Int) {
 
-  private val gcdVal = gcd(n.abs, d.abs)
-  val numerator: Int = n / gcdVal
-  val denominator: Int = d / gcdVal
+      require(denominator != 0, "Denominator cannot be zero")
+      
+      private val gcdValue: Int = gcd(numerator.abs, denominator.abs)
 
-  private def gcd(a: Int, b: Int): Int = if (b == 0) a else gcd(b, a % b)
+      val numer: Int = numerator / gcdValue
+      val denom: Int = denominator / gcdValue
 
-  def neg: Rational = new Rational(-numerator, denominator)
+      private def gcd(a: Int, b: Int): Int = {
+        
+        if (b == 0) a else gcd(b, a % b)
 
-  override def toString: String = {
-    if (denominator == 1) s"$numerator"
-    else s"$numerator/$denominator"
-  }
+      }
+
+      def neg: Rational = new Rational(-numer, denom)
+
+      override def toString: String = s"$numer/$denom"
 }
 
-object Rational {
-  def apply(n: Int, d: Int): Rational = new Rational(n, d)
+object RationalExample {
+
+      def main(args: Array[String]): Unit = {
+
+        val rational = new Rational(3, 4)     
+        print(rational.neg) 
+
+      }
 }
-
-// Example usage
-val x = Rational(3, 4)
-val neg_x = x.neg
-
-println(s"x: $x")         // Output: x: 3/4
-println(s"-x: $neg_x")    // Output: -x: -3/4
